@@ -27,7 +27,12 @@ app.use(cookieParser());
 // app.use('/', indexRouter);
 app.use(express.static('./public'));
 
-app.post('/api/v1/event', (req, res)=>{
+app.get('/api/v1/events', (req, res) => {
+  
+  res.json(eventHandler.eventsByDate);
+})
+
+app.post('/api/v1/events', (req, res)=>{
   eventHandler.addEvent(req.body)
       .then(message => res.json(message));
 });
