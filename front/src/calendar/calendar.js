@@ -111,6 +111,18 @@ class Calendar extends Component {
             })
     }
 
+    formatEvents = () => {
+        const events = this.state.events;
+        const formattedEvent = {};
+        Object.keys(events).forEach(function (key, index) {
+            const date = moment(key);
+            const day = date.format('D');
+            formattedEvent[day] = [];
+            formattedEvent[day].push(events[key]);
+        });
+        return formattedEvent;
+    }
+
     componentDidMount() {
         this.getAllEvents();
     }
@@ -132,16 +144,31 @@ class Calendar extends Component {
         for (let i = 0; i < this.firstDayOfMonth(); i++) {
             blanks.push(<td key={i * 21} className="empty">{""}</td>)
         }
+        const events = this.formatEvents();
+        console.log(events);
 
         let daysInMonth = [];
         for (let d = 1; d <= this.daysInMonth(); d++) {
             let className = (d === this.currentDay() ? "day current-day" : "day");
             let selectedClass = (d === this.state.daySelected ? "selected-day" : "")
-            daysInMonth.push(
-                <td key={d * 12} className={className + selectedClass}>
-                    <span onClick={(e) => { this.onDayClick(e, d) }}> {d} </span>
-                </td>
-            )
+            // Object.keys(events).forEach(function (key, index) {
+                if (events.hasOwnProperty(d)) {
+                    daysInMonth.push(
+                        <td key={d * 12} className={className + selectedClass}>
+                            <span onClick={(e) => { this.onDayClick(e, d) }}> {d} </span>
+                            <span>event</span>
+                        </td>
+                    )
+                } else {
+                    daysInMonth.push(
+                        <td key={d * 12} className={className + selectedClass}>
+                            <span onClick={(e) => { this.onDayClick(e, d) }}> {d} </span>
+                        </td>
+                    )
+                }
+
+            // });
+
         }
 
         var totalSlots = [...blanks, ...daysInMonth];
@@ -165,7 +192,7 @@ class Calendar extends Component {
 
         let trElems = rows.map((d, i) => {
             return (
-                <tr key={i * 100}>
+                <tr key={i * 200}>
                     {d}
                 </tr>
             );
