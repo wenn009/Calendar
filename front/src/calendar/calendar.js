@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import './calendar.css';
 import Form from '../form/form';
+import Event from '../event/event';
 
 class Calendar extends Component {
 
@@ -12,8 +13,10 @@ class Calendar extends Component {
             daySelected: null,
             dateContext: moment(),
             showForm: false,
+            showEvents: false,
             selectedDate: moment(),
             events: {},
+            event: [],
             formData: {
                 starttime: "",
                 endtime: "",
@@ -44,10 +47,20 @@ class Calendar extends Component {
     onDayClick = (e, d) => {
         this.setState({ daySelected: d }, () => {
             let selectedDate = moment(this.year() + this.month() + d);
-            this.setState({ showForm: true, selectedDate: selectedDate });
+            this.setState({ showForm: true, showEvents:false, selectedDate: selectedDate });
             // alert("selected : " + selectedDate.format("YYYY-MM-DD"));
             // prompt("event date", selectedDate.format("YYYY-MM-DD"), "event description", "hello");
         })
+    }
+    onEventClick = (e, d) => {
+        const events = this.formatEvents();
+        console.log(events);
+        if (events.hasOwnProperty(d)) {
+            console.log(events[d]);
+            this.setState({event: events[d], showForm: false, showEvents: true})
+
+        }
+
     }
     onSubmit = (event) => {
         event.preventDefault();
@@ -145,7 +158,6 @@ class Calendar extends Component {
             blanks.push(<td key={i * 21} className="empty">{""}</td>)
         }
         const events = this.formatEvents();
-        console.log(events);
 
         let daysInMonth = [];
         for (let d = 1; d <= this.daysInMonth(); d++) {
@@ -156,7 +168,7 @@ class Calendar extends Component {
                     daysInMonth.push(
                         <td key={d * 12} className={className + selectedClass}>
                             <span onClick={(e) => { this.onDayClick(e, d) }}> {d} </span>
-                            <span>event</span>
+                            <span onClick={(e) => { this.onEventClick(e, d) }}>event</span>
                         </td>
                     )
                 } else {
@@ -204,7 +216,7 @@ class Calendar extends Component {
                     <span>{this.year()}</span>
                     <span>{this.month()}</span>
                 </h4>
-                <table>
+                <table align="center">
                     <thead>
                         <tr>
                             {weekdays}
@@ -218,9 +230,11 @@ class Calendar extends Component {
                     <Form date={this.state.selectedDate}
                         handleChange={this.handleChange}
                         onSubmit={this.onSubmit} /> :
-                    <div></div>
+                    <div />
                 }
-
+                {this.state.showEvents ? 
+                    <Event events={this.state.event}/> : <div />
+                }
             </div>
         );
     }
