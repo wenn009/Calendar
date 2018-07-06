@@ -212,7 +212,7 @@ class Calendar extends Component {
 
         return (
             <div>
-                <h4>
+                <h4 className="calendar-heading">
                     <span>{this.year()}</span>
                     <span>{this.month()}</span>
                 </h4>
@@ -227,13 +227,13 @@ class Calendar extends Component {
                     </tbody>
                 </table>
                 {this.state.showForm ?
-                    <Form date={this.state.selectedDate}
+                    <Form className="form" date={this.state.selectedDate}
                         handleChange={this.handleChange}
                         onSubmit={this.onSubmit} /> :
                     <div />
                 }
                 {this.state.showEvents ? 
-                    <Event events={this.state.event}/> : <div />
+                    <Event className="event" events={this.state.event}/> : <div />
                 }
             </div>
         );

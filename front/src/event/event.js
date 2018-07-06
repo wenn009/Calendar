@@ -4,7 +4,7 @@ import './event.css';
 class Event extends Component {
     render() {
         return (
-            <div >
+            <div text-align="center">
                 {console.log(this.props.events)}
                 {this.props.events.map((e, key) => {
                     return e.map((event, key) => {
