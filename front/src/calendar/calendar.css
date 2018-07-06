@@ -1,3 +1,7 @@
 .calendar-heading {
     text-align: center
 }
+
+.event, .form {
+    text-align: center
+}

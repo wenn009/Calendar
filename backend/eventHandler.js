@@ -1,5 +1,4 @@
 const eventModel = require('./eventModel');
-const e = new eventModel();
 
 const getEvents = function () {
     return new Promise((resolve, reject) => {
@@ -25,7 +24,7 @@ const getEvents = function () {
 }
 const addEvent = function (body) {
     return new Promise((resolve, reject) => {
-
+        const e = new eventModel();
         e.date = body.date;
         e.starttime = body.starttime;
         e.endtime = body.endtime;
