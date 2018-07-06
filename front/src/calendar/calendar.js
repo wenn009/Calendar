@@ -13,6 +13,7 @@ class Calendar extends Component {
             dateContext: moment(),
             showForm: false,
             selectedDate: moment(),
+            events: {},
             formData: {
                 starttime: "",
                 endtime: "",
@@ -55,7 +56,7 @@ class Calendar extends Component {
         const endtime = this.state.formData.endtime;
         const description = this.state.formData.description;
 
-        fetch('http://localhost:3000/api/v1/event', {
+        fetch('http://localhost:3000/api/v1/events', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -73,7 +74,8 @@ class Calendar extends Component {
             })
             .then((jsonBody) => {
                 console.log(jsonBody);
-                this.setState({showForm: false});
+                this.setState({ showForm: false });
+                this.getAllEvents();
             })
             .catch((err) => {
                 console.log(err);
@@ -88,6 +90,37 @@ class Calendar extends Component {
         this.setState({ formData });
 
     }
+
+    getAllEvents = () => {
+        fetch('http://localhost:3000/api/v1/events', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((jsonBody) => {
+                console.log(jsonBody);
+                this.setState({ events: jsonBody });
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
+    componentDidMount() {
+        this.getAllEvents();
+    }
+
+    // componentDidUpdate(prevProps, prevState) {
+    //     if (prevState.showForm !== this.state.showForm && this.state.showForm !== true) {
+    //         this.getAllEvents();
+    //     }
+
+    // }
 
     render() {
 

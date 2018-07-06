@@ -29,7 +29,8 @@ app.use(express.static('./public'));
 
 app.get('/api/v1/events', (req, res) => {
   
-  res.json(eventHandler.eventsByDate);
+  eventHandler.getEvents()
+    .then(jsonBody => res.json(jsonBody))
 })
 
 app.post('/api/v1/events', (req, res)=>{
